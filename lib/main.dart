@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'core/theme/theme_provider.dart';
 import 'data/databases/database_service.dart';
 import 'services/speech_service.dart';
-import 'presentation/pages/main_dashboard.dart';
+import 'presentation/pages/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Hive
+  await Hive.initFlutter();
   
   // Initialize core services
   await _initializeServices();
@@ -34,18 +39,18 @@ Future<void> _initializeServices() async {
   }
 }
 
-class AIAssistantApp extends StatelessWidget {
+class AIAssistantApp extends ConsumerWidget {
   const AIAssistantApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      title: 'AI Assistant',
+      title: 'AI Personal Assistant',
       debugShowCheckedModeBanner: false,
       theme: ThemeProvider.lightTheme,
       darkTheme: ThemeProvider.darkTheme,
       themeMode: ThemeMode.system,
-      home: const MainDashboard(),
+      home: const SplashScreen(),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/theme/app_theme.dart';
 import '../../features/avatar/presentation/widgets/ai_avatar.dart';
+import 'in_app_search_page.dart';
 
 class MainDashboard extends StatefulWidget {
   const MainDashboard({super.key});
@@ -64,9 +65,7 @@ class _MainDashboardState extends State<MainDashboard> {
           children: [
             _buildHeader(),
             Expanded(
-              child: _currentIndex == 0 
-                  ? _buildChatInterface()
-                  : _buildFeatureGrid(),
+              child: _buildCurrentPage(),
             ),
           ],
         ),
@@ -75,6 +74,307 @@ class _MainDashboardState extends State<MainDashboard> {
       floatingActionButton: _buildVoiceButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  Widget _buildCurrentPage() {
+    switch (_currentIndex) {
+      case 0:
+        return _buildChatInterface();
+      case 1:
+        return _buildFeatureGrid();
+      case 2:
+        return _buildSearchInterface();
+      case 3:
+        return _buildSettingsInterface();
+      default:
+        return _buildChatInterface();
+    }
+  }
+
+  Widget _buildSearchInterface() {
+    return Container(
+      padding: const EdgeInsets.all(AppSizes.spaceLG),
+      child: Column(
+        children: [
+          // Search header
+          Row(
+            children: [
+              Icon(
+                Icons.search,
+                color: AppColors.primary,
+                size: 28,
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'Smart Search',
+                style: AppTextStyles.headline4.copyWith(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ).animate().fadeIn().slideX(),
+          
+          const SizedBox(height: 24),
+          
+          // Search bar
+          GestureDetector(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const InAppSearchPage(),
+              ),
+            ),
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSizes.spaceMD,
+                vertical: AppSizes.spaceMD,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppSizes.radiusLG),
+                border: Border.all(color: AppColors.inputBorder),
+                boxShadow: AppShadows.small,
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.search,
+                    color: AppColors.textSecondary,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'Search anything on Google...',
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    color: AppColors.textSecondary,
+                    size: 16,
+                  ),
+                ],
+              ),
+            ),
+          ).animate().fadeIn(delay: 200.ms).slideY(),
+          
+          const SizedBox(height: 32),
+          
+          // Quick search categories
+          Expanded(
+            child: GridView.count(
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              children: [
+                _buildSearchCategory(
+                  'News & Updates',
+                  Icons.newspaper,
+                  AppColors.info,
+                  'latest news',
+                ),
+                _buildSearchCategory(
+                  'Weather',
+                  Icons.wb_sunny,
+                  AppColors.warning,
+                  'weather today',
+                ),
+                _buildSearchCategory(
+                  'Technology',
+                  Icons.computer,
+                  AppColors.primary,
+                  'latest technology',
+                ),
+                _buildSearchCategory(
+                  'Entertainment',
+                  Icons.movie,
+                  AppColors.error,
+                  'movies and shows',
+                ),
+                _buildSearchCategory(
+                  'Sports',
+                  Icons.sports_soccer,
+                  AppColors.success,
+                  'sports news',
+                ),
+                _buildSearchCategory(
+                  'Finance',
+                  Icons.trending_up,
+                  AppColors.secondary,
+                  'stock market',
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchCategory(String title, IconData icon, Color color, String query) {
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => InAppSearchPage(initialQuery: query),
+        ),
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(AppSizes.spaceMD),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(AppSizes.radiusLG),
+          border: Border.all(color: color.withOpacity(0.2)),
+          boxShadow: AppShadows.small,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                color: color,
+                size: 32,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              title,
+              style: AppTextStyles.labelLarge.copyWith(
+                color: AppColors.textPrimary,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    ).animate(delay: (100 * title.hashCode % 500).ms)
+     .fadeIn(duration: 600.ms)
+     .scale(begin: const Offset(0.8, 0.8));
+  }
+
+  Widget _buildSettingsInterface() {
+    return Container(
+      padding: const EdgeInsets.all(AppSizes.spaceLG),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.settings,
+                color: AppColors.primary,
+                size: 28,
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'Settings',
+                style: AppTextStyles.headline4.copyWith(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ).animate().fadeIn().slideX(),
+          
+          const SizedBox(height: 24),
+          
+          Expanded(
+            child: ListView(
+              children: [
+                _buildSettingsTile(
+                  Icons.person,
+                  'Profile',
+                  'Manage your account settings',
+                  () {},
+                ),
+                _buildSettingsTile(
+                  Icons.notifications,
+                  'Notifications',
+                  'Control notification preferences',
+                  () {},
+                ),
+                _buildSettingsTile(
+                  Icons.security,
+                  'Privacy & Security',
+                  'Manage your privacy settings',
+                  () {},
+                ),
+                _buildSettingsTile(
+                  Icons.palette,
+                  'Appearance',
+                  'Customize app theme',
+                  () {},
+                ),
+                _buildSettingsTile(
+                  Icons.help,
+                  'Help & Support',
+                  'Get help and support',
+                  () {},
+                ),
+                _buildSettingsTile(
+                  Icons.info,
+                  'About',
+                  'App information and credits',
+                  () {},
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSettingsTile(IconData icon, String title, String subtitle, VoidCallback onTap) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: ListTile(
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: AppColors.primary.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            icon,
+            color: AppColors.primary,
+            size: 20,
+          ),
+        ),
+        title: Text(
+          title,
+          style: AppTextStyles.labelLarge.copyWith(
+            color: AppColors.textPrimary,
+          ),
+        ),
+        subtitle: Text(
+          subtitle,
+          style: AppTextStyles.bodySmall.copyWith(
+            color: AppColors.textSecondary,
+          ),
+        ),
+        trailing: Icon(
+          Icons.arrow_forward_ios,
+          color: AppColors.textSecondary,
+          size: 16,
+        ),
+        onTap: onTap,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        tileColor: Colors.white,
+      ),
+    ).animate().fadeIn().slideX();
   }
 
   Widget _buildHeader() {
@@ -311,7 +611,19 @@ class _MainDashboardState extends State<MainDashboard> {
   Widget _buildNavItem(IconData icon, String label, int index) {
     final isSelected = _currentIndex == index;
     return InkWell(
-      onTap: () => setState(() => _currentIndex = index),
+      onTap: () {
+        if (index == 2) {
+          // Handle search differently - open search page directly
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const InAppSearchPage(),
+            ),
+          );
+        } else {
+          setState(() => _currentIndex = index);
+        }
+      },
       borderRadius: BorderRadius.circular(AppSizes.radiusSM),
       child: Padding(
         padding: const EdgeInsets.symmetric(

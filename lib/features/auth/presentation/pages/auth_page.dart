@@ -4,7 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../presentation/pages/main_dashboard.dart';
-import '../providers/auth_provider.dart';
+import '../providers/simple_auth_provider.dart';
 
 enum AuthPageType { login, signup, otp }
 
@@ -685,7 +685,7 @@ class _AuthPageState extends ConsumerState<AuthPage>
     setState(() => _isLoading = true);
 
     try {
-      final authNotifier = ref.read(authProvider.notifier);
+      final authNotifier = ref.read(simpleAuthProvider.notifier);
       await authNotifier.login(
         email: _emailController.text.trim(),
         password: _passwordController.text,
@@ -713,7 +713,7 @@ class _AuthPageState extends ConsumerState<AuthPage>
     setState(() => _isLoading = true);
 
     try {
-      final authNotifier = ref.read(authProvider.notifier);
+      final authNotifier = ref.read(simpleAuthProvider.notifier);
       await authNotifier.signup(
         name: _nameController.text.trim(),
         email: _emailController.text.trim(),
@@ -743,7 +743,7 @@ class _AuthPageState extends ConsumerState<AuthPage>
     setState(() => _isLoading = true);
 
     try {
-      final authNotifier = ref.read(authProvider.notifier);
+      final authNotifier = ref.read(simpleAuthProvider.notifier);
       await authNotifier.verifyOTP(
         email: _emailController.text.trim(),
         otp: _otpController.text,
@@ -767,7 +767,7 @@ class _AuthPageState extends ConsumerState<AuthPage>
 
   Future<void> _handleResendOTP() async {
     try {
-      final authNotifier = ref.read(authProvider.notifier);
+      final authNotifier = ref.read(simpleAuthProvider.notifier);
       await authNotifier.resendOTP(_emailController.text.trim());
       
       if (mounted) {
