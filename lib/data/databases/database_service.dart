@@ -3,7 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../../core/constants/app_constants.dart';
-import '../../core/errors/exceptions.dart';
+import '../../core/errors/exceptions.dart' as app_exceptions;
 
 class DatabaseService {
   static DatabaseService? _instance;
@@ -44,7 +44,7 @@ class DatabaseService {
       await _initializeHive();
       await _initializeSQLite();
     } catch (e) {
-      throw DatabaseException('Failed to initialize databases: ${e.toString()}');
+            throw app_exceptions.DatabaseException('Failed to initialize database: $e');
     }
   }
 
@@ -250,70 +250,70 @@ class DatabaseService {
   // Getters for Hive boxes
   static Box<dynamic> get userBox {
     if (_userBox == null) {
-      throw DatabaseException('User box not initialized');
+      throw app_exceptions.DatabaseException('User box not initialized');
     }
     return _userBox!;
   }
 
   static Box<dynamic> get settingsBox {
     if (_settingsBox == null) {
-      throw DatabaseException('Settings box not initialized');
+      throw app_exceptions.DatabaseException('Settings box not initialized');
     }
     return _settingsBox!;
   }
 
   static Box<dynamic> get conversationBox {
     if (_conversationBox == null) {
-      throw DatabaseException('Conversation box not initialized');
+      throw app_exceptions.DatabaseException('Conversation box not initialized');
     }
     return _conversationBox!;
   }
 
   static Box<dynamic> get taskBox {
     if (_taskBox == null) {
-      throw DatabaseException('Task box not initialized');
+      throw app_exceptions.DatabaseException('Task box not initialized');
     }
     return _taskBox!;
   }
 
   static Box<dynamic> get contactBox {
     if (_contactBox == null) {
-      throw DatabaseException('Contact box not initialized');
+      throw app_exceptions.DatabaseException('Contact box not initialized');
     }
     return _contactBox!;
   }
 
   static Box<dynamic> get mediaBox {
     if (_mediaBox == null) {
-      throw DatabaseException('Media box not initialized');
+      throw app_exceptions.DatabaseException('Media box not initialized');
     }
     return _mediaBox!;
   }
 
   static Box<dynamic> get authBox {
     if (_authBox == null) {
-      throw DatabaseException('Auth box not initialized');
+      throw app_exceptions.DatabaseException('Auth box not initialized');
     }
     return _authBox!;
   }
 
   static Box<dynamic> get otpBox {
     if (_otpBox == null) {
-      throw DatabaseException('OTP box not initialized');
+      throw app_exceptions.DatabaseException('OTP box not initialized');
     }
     return _otpBox!;
   }
 
   static Box<dynamic> get passwordBox {
     if (_passwordBox == null) {
-      throw DatabaseException('Password box not initialized');
+      throw app_exceptions.DatabaseException('Password box not initialized');
     }
     return _passwordBox!;
   }
 
   static Box<dynamic> get securityBox {
     if (_securityBox == null) {
-      throw DatabaseException('Security box not initialized');
+      throw app_exceptions.DatabaseException('Security box not initialized');
     }
     return _securityBox!;
   }
@@ -321,7 +321,7 @@ class DatabaseService {
   // Getter for SQLite database
   Database get database {
     if (_database == null) {
-      throw DatabaseException('SQLite database not initialized');
+      throw app_exceptions.DatabaseException('SQLite database not initialized');
     }
     return _database!;
   }
@@ -354,7 +354,7 @@ class DatabaseService {
       // Clear secure storage
       await _secureStorage.deleteAll();
     } catch (e) {
-      throw DatabaseException('Failed to clear user data: ${e.toString()}');
+      throw app_exceptions.DatabaseException('Failed to clear user data: ${e.toString()}');
     }
   }
 
@@ -385,7 +385,7 @@ class DatabaseService {
 
       return userData;
     } catch (e) {
-      throw DatabaseException('Failed to export user data: ${e.toString()}');
+      throw app_exceptions.DatabaseException('Failed to export user data: ${e.toString()}');
     }
   }
 
@@ -396,7 +396,7 @@ class DatabaseService {
       // For now, we'll keep it simple
       throw UnimplementedError('Import functionality not yet implemented');
     } catch (e) {
-      throw DatabaseException('Failed to import user data: ${e.toString()}');
+      throw app_exceptions.DatabaseException('Failed to import user data: ${e.toString()}');
     }
   }
 
@@ -406,7 +406,7 @@ class DatabaseService {
       await _database?.close();
       await Hive.close();
     } catch (e) {
-      throw DatabaseException('Failed to close databases: ${e.toString()}');
+      throw app_exceptions.DatabaseException('Failed to close databases: ${e.toString()}');
     }
   }
 }

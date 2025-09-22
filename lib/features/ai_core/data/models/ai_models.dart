@@ -1,9 +1,12 @@
-import 'package:json_annotation/json_annotation.dart';
 import '../../domain/entities/ai_entities.dart';
 
-part 'ai_models.g.dart';
+enum AIResponseType {
+  text,
+  voice,
+  mixed,
+  error,
+}
 
-@JsonSerializable()
 class AIMessageModel extends AIMessage {
   const AIMessageModel({
     required super.id,
@@ -14,10 +17,27 @@ class AIMessageModel extends AIMessage {
     super.metadata,
   });
 
-  factory AIMessageModel.fromJson(Map<String, dynamic> json) =>
-      _$AIMessageModelFromJson(json);
+  factory AIMessageModel.fromJson(Map<String, dynamic> json) {
+    return AIMessageModel(
+      id: json['id'],
+      content: json['content'],
+      role: json['role'],
+      timestamp: DateTime.parse(json['timestamp']),
+      type: json['type'],
+      metadata: json['metadata'] != null ? Map<String, dynamic>.from(json['metadata']) : null,
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$AIMessageModelToJson(this);
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'content': content,
+      'role': role,
+      'timestamp': timestamp.toIso8601String(),
+      'type': type,
+      'metadata': metadata,
+    };
+  }
 
   factory AIMessageModel.fromEntity(AIMessage entity) {
     return AIMessageModel(
@@ -42,7 +62,6 @@ class AIMessageModel extends AIMessage {
   }
 }
 
-@JsonSerializable()
 class AIResponseModel extends AIResponse {
   const AIResponseModel({
     required super.id,
@@ -54,10 +73,29 @@ class AIResponseModel extends AIResponse {
     super.suggestions,
   });
 
-  factory AIResponseModel.fromJson(Map<String, dynamic> json) =>
-      _$AIResponseModelFromJson(json);
+  factory AIResponseModel.fromJson(Map<String, dynamic> json) {
+    return AIResponseModel(
+      id: json['id'],
+      content: json['content'],
+      timestamp: DateTime.parse(json['timestamp']),
+      type: json['type'],
+      confidence: json['confidence']?.toDouble(),
+      metadata: json['metadata'] != null ? Map<String, dynamic>.from(json['metadata']) : null,
+      suggestions: json['suggestions'] != null ? List<String>.from(json['suggestions']) : null,
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$AIResponseModelToJson(this);
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'content': content,
+      'timestamp': timestamp.toIso8601String(),
+      'type': type,
+      'confidence': confidence,
+      'metadata': metadata,
+      'suggestions': suggestions,
+    };
+  }
 
   factory AIResponseModel.fromEntity(AIResponse entity) {
     return AIResponseModel(
@@ -84,7 +122,6 @@ class AIResponseModel extends AIResponse {
   }
 }
 
-@JsonSerializable()
 class AIConversationContextModel extends AIConversationContext {
   const AIConversationContextModel({
     required super.conversationId,
@@ -95,10 +132,29 @@ class AIConversationContextModel extends AIConversationContext {
     super.sessionData,
   });
 
-  factory AIConversationContextModel.fromJson(Map<String, dynamic> json) =>
-      _$AIConversationContextModelFromJson(json);
+  factory AIConversationContextModel.fromJson(Map<String, dynamic> json) {
+    return AIConversationContextModel(
+      conversationId: json['conversationId'],
+      history: json['history'] != null 
+        ? (json['history'] as List).map((e) => AIMessageModel.fromJson(e)).toList()
+        : null,
+      userPersonality: json['userPersonality'],
+      aiPersonality: json['aiPersonality'],
+      preferences: json['preferences'] != null ? Map<String, dynamic>.from(json['preferences']) : null,
+      sessionData: json['sessionData'] != null ? Map<String, dynamic>.from(json['sessionData']) : null,
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$AIConversationContextModelToJson(this);
+  Map<String, dynamic> toJson() {
+    return {
+      'conversationId': conversationId,
+      'history': history?.map((e) => (e as AIMessageModel).toJson()).toList(),
+      'userPersonality': userPersonality,
+      'aiPersonality': aiPersonality,
+      'preferences': preferences,
+      'sessionData': sessionData,
+    };
+  }
 
   factory AIConversationContextModel.fromEntity(AIConversationContext entity) {
     return AIConversationContextModel(

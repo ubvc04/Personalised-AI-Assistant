@@ -54,7 +54,6 @@ dependencies:
   
   # Media & Files
   image_picker: ^1.0.5
-  file_picker: ^6.1.1
   path_provider: ^2.1.2
   permission_handler: ^11.2.0
   camera: ^0.10.5+7

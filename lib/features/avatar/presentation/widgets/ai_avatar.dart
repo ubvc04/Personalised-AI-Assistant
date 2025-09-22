@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rive/rive.dart';
+import 'package:rive/rive.dart' hide LinearGradient;
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../core/theme/app_theme.dart';
+import '../../../../core/theme/app_theme.dart';
 
 class AIAvatar extends StatefulWidget {
   final String personality;

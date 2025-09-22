@@ -2,7 +2,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../../core/errors/exceptions.dart';
+import '../../../../core/errors/exceptions.dart' as app_exceptions;
 import '../../../../core/utils/app_utils.dart';
 import '../models/ai_models.dart';
 
@@ -105,7 +105,7 @@ class AIRemoteDataSourceImpl implements AIRemoteDataSource {
         suggestions: _extractSuggestions(response.text!),
       );
     } catch (e) {
-      throw ServerException('Failed to send message: ${e.toString()}');
+      throw app_exceptions.ServerException('Failed to send message: ${e.toString()}');
     }
   }
 
@@ -153,7 +153,7 @@ class AIRemoteDataSourceImpl implements AIRemoteDataSource {
         suggestions: _extractSuggestions(content),
       );
     } catch (e) {
-      throw ServerException('Failed to process voice command: ${e.toString()}');
+      throw app_exceptions.ServerException('Failed to process voice command: ${e.toString()}');
     }
   }
 
@@ -191,7 +191,7 @@ class AIRemoteDataSourceImpl implements AIRemoteDataSource {
         ],
       );
     } catch (e) {
-      throw ServerException('Failed to analyze image: ${e.toString()}');
+      throw app_exceptions.ServerException('Failed to analyze image: ${e.toString()}');
     }
   }
 
@@ -277,7 +277,7 @@ class AIRemoteDataSourceImpl implements AIRemoteDataSource {
       
       return response.text?.trim() ?? text;
     } catch (e) {
-      throw ServerException('Failed to translate text: ${e.toString()}');
+      throw app_exceptions.ServerException('Failed to translate text: ${e.toString()}');
     }
   }
 
@@ -298,7 +298,7 @@ class AIRemoteDataSourceImpl implements AIRemoteDataSource {
       
       return response.text?.trim() ?? text;
     } catch (e) {
-      throw ServerException('Failed to summarize text: ${e.toString()}');
+      throw app_exceptions.ServerException('Failed to summarize text: ${e.toString()}');
     }
   }
 
